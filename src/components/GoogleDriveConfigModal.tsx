@@ -35,14 +35,19 @@ export const GoogleDriveConfigModal: React.FC<GoogleDriveConfigModalProps> = ({
 
   const handleLoginDrive = () => {
     setErrorMsg(null);
-    if (!clientId.trim()) {
+    const cleanedClientId = clientId.trim();
+    if (!cleanedClientId) {
       setErrorMsg('Vui lòng nhập Google OAuth Client ID trước khi đăng nhập.');
       return;
     }
 
+    // Auto-save Client ID to config
+    const updatedConfig = { ...config, clientId: cleanedClientId };
+    onSaveConfig(updatedConfig);
+
     try {
       initGoogleAuth(
-        clientId.trim(),
+        cleanedClientId,
         (token) => {
           if (token) {
             onSync();
@@ -50,7 +55,14 @@ export const GoogleDriveConfigModal: React.FC<GoogleDriveConfigModalProps> = ({
         },
         (err) => {
           console.error('Google OAuth Login Error:', err);
-          setErrorMsg('Đăng nhập thất bại. Vui lòng kiểm tra lại Client ID và Domain Authorized Javascript Origins.');
+          let errText = 'Đăng nhập thất bại.';
+          if (typeof err === 'object' && err !== null) {
+            if (err.error) errText += ` Lỗi: ${err.error}`;
+            if (err.details) errText += ` (${err.details})`;
+          } else if (typeof err === 'string') {
+            errText += ` ${err}`;
+          }
+          setErrorMsg(errText);
         }
       );
 
