@@ -347,25 +347,28 @@ input, select, textarea {
 }
 
 .rep-value {
-  font-family: var(--font-pixel-heading);
-  font-size: 2.4rem;
-  font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 2.8rem;
+  font-weight: 800;
   color: var(--pixel-green);
   line-height: 1;
+  letter-spacing: -0.5px;
 }
 
 .rep-unit {
-  font-family: var(--font-pixel-code);
+  font-family: var(--font-body);
   font-size: 1.1rem;
+  font-weight: 700;
   color: var(--pixel-yellow);
-  margin-left: 0.3rem;
+  margin-left: 0.35rem;
 }
 
 .updated-date {
-  font-family: var(--font-pixel-code);
-  font-size: 0.9rem;
-  color: var(--text-dim);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: #d1d5db;
   text-align: right;
+  font-weight: 600;
 }
 
 /* History Section inside Card */
@@ -381,9 +384,10 @@ input, select, textarea {
   justify-content: space-between;
   align-items: center;
   padding: 0.3rem 0;
-  color: var(--text-muted);
-  font-family: var(--font-pixel-code);
-  font-size: 1rem;
+  color: var(--text-main);
+  font-family: var(--font-pixel-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
 .history-toggle:hover {
@@ -393,7 +397,7 @@ input, select, textarea {
 .history-list {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.4rem;
   margin-top: 0.6rem;
 }
 
@@ -401,24 +405,28 @@ input, select, textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.4rem 0.65rem;
+  padding: 0.45rem 0.75rem;
   background: var(--bg-surface);
-  border: 1px solid var(--border-pixel);
-  font-family: var(--font-pixel-code);
-  font-size: 0.95rem;
+  border: 2px solid var(--border-pixel);
+  font-family: var(--font-body);
+  font-size: 1rem;
 }
 
 .history-item-badge {
-  font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 800;
   color: var(--pixel-yellow);
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.35rem;
 }
 
 .history-item-date {
-  color: var(--text-dim);
-  font-size: 0.85rem;
+  font-family: var(--font-body);
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .card-actions {
