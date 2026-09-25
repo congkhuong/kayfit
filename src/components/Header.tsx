@@ -24,8 +24,8 @@ export const Header: React.FC<HeaderProps> = ({
           <Dumbbell size={24} />
         </div>
         <div>
-          <h1 className="brand-title">KayFit</h1>
-          <p className="brand-subtitle">Max Rep Tracker</p>
+          <h1 className="brand-title">KAYFIT</h1>
+          <p className="brand-subtitle">[ 8-BIT MAX LOG ]</p>
         </div>
       </div>
 
@@ -38,12 +38,12 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <span className={`dot ${isSyncing ? 'pulse' : ''}`} />
             <Cloud size={14} />
-            <span>{isSyncing ? 'Đang đồng bộ...' : 'Drive Synced'}</span>
+            <span>{isSyncing ? 'SYNCING...' : 'DRIVE ONLINE'}</span>
           </div>
         ) : (
           <div className="sync-badge offline" title="Dữ liệu lưu tại máy (LocalStorage)">
             <CloudOff size={14} />
-            <span>Local Storage</span>
+            <span>LOCAL SAVE</span>
           </div>
         )}
 
@@ -71,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Add Exercise Primary Button */}
         <button className="btn btn-primary" onClick={onOpenAddModal}>
           <Plus size={18} />
-          <span>Thêm bài tập</span>
+          <span>+ BÀI TẬP</span>
         </button>
       </div>
     </header>

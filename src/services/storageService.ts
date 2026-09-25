@@ -56,9 +56,26 @@ const DEFAULT_INITIAL_DATA: KayFitData = {
       id: 'ex-3',
       name: 'Squat (Gánh đùi)',
       category: 'Legs',
+      unit: 'reps',
       currentMaxReps: 50,
       lastUpdated: new Date(Date.now() - 3 * 86400000).toISOString().split('T')[0],
       history: [],
+    },
+    {
+      id: 'ex-4',
+      name: 'Plank (Giữ bụng)',
+      category: 'Core',
+      unit: 'seconds',
+      currentMaxReps: 90,
+      lastUpdated: new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0],
+      history: [
+        {
+          id: 'hist-4-1',
+          reps: 60,
+          unit: 'seconds',
+          date: new Date(Date.now() - 10 * 86400000).toISOString().split('T')[0],
+        },
+      ],
     },
   ],
 };
@@ -108,7 +125,7 @@ export const generateId = (): string => {
 };
 
 /**
- * Update Max Reps for an existing Exercise
+ * Update Max Reps/Time for an existing Exercise
  * Strictly archives the previous record into history (capped at 4 items max).
  */
 export const updateExerciseReps = (
@@ -124,6 +141,7 @@ export const updateExerciseReps = (
     const previousRecord: HistoryRecord = {
       id: generateId(),
       reps: ex.currentMaxReps,
+      unit: ex.unit || 'reps',
       date: ex.lastUpdated || newDate,
     };
 
@@ -150,12 +168,14 @@ export const addNewExercise = (
   name: string,
   category: string | undefined,
   initialMaxReps: number,
-  date: string
+  date: string,
+  unit: 'reps' | 'seconds' = 'reps'
 ): Exercise[] => {
   const newEx: Exercise = {
     id: generateId(),
     name: name.trim(),
     category: category ? category.trim() : undefined,
+    unit: unit,
     currentMaxReps: initialMaxReps,
     lastUpdated: date,
     history: [],

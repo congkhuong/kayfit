@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Dumbbell, Plus, CheckCircle2 } from 'lucide-react';
-import type { Exercise, GoogleDriveConfig, KayFitData } from './types/exercise';
+import type { Exercise, ExerciseUnit, GoogleDriveConfig, KayFitData } from './types/exercise';
 import {
   addNewExercise,
   getDriveConfig,
@@ -84,13 +84,15 @@ export const App: React.FC = () => {
     name: string,
     category: string | undefined,
     reps: number,
-    date: string
+    date: string,
+    unit: ExerciseUnit = 'reps'
   ) => {
-    const updatedExercises = addNewExercise(data.exercises, name, category, reps, date);
+    const updatedExercises = addNewExercise(data.exercises, name, category, reps, date, unit);
     const newData: KayFitData = { ...data, exercises: updatedExercises };
     setData(newData);
     saveLocalData(newData);
-    showToast(`Đã thêm bài tập "${name}" (${reps} reps)!`);
+    const unitSuffix = unit === 'seconds' ? 'giây' : 'reps';
+    showToast(`Đã thêm bài tập "${name}" (${reps} ${unitSuffix})!`);
 
     // Auto sync if drive connected
     if (getStoredToken() && driveConfig.isConnected) {

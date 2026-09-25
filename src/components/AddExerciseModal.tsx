@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import { PlusCircle, X } from 'lucide-react';
+import type { ExerciseUnit } from '../types/exercise';
 
 interface AddExerciseModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (name: string, category: string | undefined, reps: number, date: string) => void;
+  onAdd: (
+    name: string,
+    category: string | undefined,
+    reps: number,
+    date: string,
+    unit: ExerciseUnit
+  ) => void;
 }
 
 export const AddExerciseModal: React.FC<AddExerciseModalProps> = ({ isOpen, onClose, onAdd }) => {
@@ -12,6 +19,7 @@ export const AddExerciseModal: React.FC<AddExerciseModalProps> = ({ isOpen, onCl
 
   const [name, setName] = useState('');
   const [category, setCategory] = useState('Push');
+  const [unit, setUnit] = useState<ExerciseUnit>('reps');
   const [reps, setReps] = useState<number>(10);
   const [date, setDate] = useState(today);
 
@@ -20,9 +28,10 @@ export const AddExerciseModal: React.FC<AddExerciseModalProps> = ({ isOpen, onCl
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
-    onAdd(name, category, Number(reps), date);
+    onAdd(name, category, Number(reps), date, unit);
     // Reset form
     setName('');
+    setUnit('reps');
     setReps(10);
     setDate(today);
     onClose();
@@ -47,7 +56,7 @@ export const AddExerciseModal: React.FC<AddExerciseModalProps> = ({ isOpen, onCl
             <input
               type="text"
               className="form-input"
-              placeholder="VD: Hít đất, Kéo xà, Dip..."
+              placeholder="VD: Hít đất, Plank, L-sit..."
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -55,28 +64,44 @@ export const AddExerciseModal: React.FC<AddExerciseModalProps> = ({ isOpen, onCl
             />
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Phân loại (Category)</label>
-            <select
-              className="form-input"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <option value="Push">Push (Đẩy: Hít đất, Dips...)</option>
-              <option value="Pull">Pull (Kéo: Xà đơn, Rowing...)</option>
-              <option value="Legs">Legs (Chân: Squat, Lunge...)</option>
-              <option value="Core">Core (Bụng: Plank, Sit-up...)</option>
-              <option value="Cardio">Cardio / Khác</option>
-            </select>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div className="form-group">
+              <label className="form-label">Phân loại (Category)</label>
+              <select
+                className="form-input"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="Push">Push (Đẩy)</option>
+                <option value="Pull">Pull (Kéo)</option>
+                <option value="Legs">Legs (Chân)</option>
+                <option value="Core">Core (Bụng/Giữ)</option>
+                <option value="Cardio">Cardio / Khác</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Đơn vị đo lường *</label>
+              <select
+                className="form-input"
+                value={unit}
+                onChange={(e) => setUnit(e.target.value as ExerciseUnit)}
+              >
+                <option value="reps">Số lần (Reps)</option>
+                <option value="seconds">Thời gian (Giây)</option>
+              </select>
+            </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div className="form-group">
-              <label className="form-label">Max Rep ban đầu *</label>
+              <label className="form-label">
+                {unit === 'seconds' ? 'Kỷ kỷ lục thời gian (Giây) *' : 'Max Rep ban đầu *'}
+              </label>
               <input
                 type="number"
                 min="1"
-                max="9999"
+                max="99999"
                 className="form-input"
                 value={reps}
                 onChange={(e) => setReps(Math.max(1, parseInt(e.target.value) || 0))}

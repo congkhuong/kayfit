@@ -7,10 +7,23 @@ interface ExerciseCardProps {
   onUpdateReps: (exercise: Exercise) => void;
 }
 
+const formatValueWithUnit = (val: number, unit?: string) => {
+  if (unit === 'seconds') {
+    if (val >= 60) {
+      const mins = Math.floor(val / 60);
+      const secs = val % 60;
+      return secs > 0 ? `${val}s (${mins}m ${secs}s)` : `${val}s (${mins}m)`;
+    }
+    return `${val} giây`;
+  }
+  return `${val} reps`;
+};
+
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onUpdateReps }) => {
   const [showHistory, setShowHistory] = useState(false);
 
   const historyCount = exercise.history?.length || 0;
+  const isSeconds = exercise.unit === 'seconds';
 
   return (
     <div className="exercise-card">
@@ -21,11 +34,16 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onUpdateRe
 
       <div className="card-body">
         <div className="rep-stat">
-          <span className="rep-label">Max Rep Hiện Tại</span>
+          <span className="rep-label">{isSeconds ? 'Max Thời Gian' : 'Max Rep Hiện Tại'}</span>
           <div style={{ display: 'flex', alignItems: 'baseline' }}>
             <span className="rep-value">{exercise.currentMaxReps}</span>
-            <span className="rep-unit">reps</span>
+            <span className="rep-unit">{isSeconds ? 'giây' : 'reps'}</span>
           </div>
+          {isSeconds && exercise.currentMaxReps >= 60 && (
+            <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', fontWeight: 600 }}>
+              ({Math.floor(exercise.currentMaxReps / 60)} phút {exercise.currentMaxReps % 60}s)
+            </span>
+          )}
         </div>
 
         <div className="updated-date">
@@ -42,7 +60,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onUpdateRe
       <div className="card-actions">
         <button className="btn btn-primary" onClick={() => onUpdateReps(exercise)}>
           <Edit3 size={16} />
-          <span>Cập nhật Reps</span>
+          <span>{isSeconds ? 'Cập nhật Thời gian' : 'Cập nhật Reps'}</span>
         </button>
       </div>
 
@@ -71,7 +89,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onUpdateRe
                 <div key={record.id || index} className="history-item">
                   <div className="history-item-badge">
                     <Award size={12} style={{ color: 'var(--accent-amber)' }} />
-                    <span>{record.reps} reps</span>
+                    <span>{formatValueWithUnit(record.reps, record.unit || exercise.unit)}</span>
                   </div>
                   <span className="history-item-date">{record.date}</span>
                 </div>

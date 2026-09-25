@@ -29,6 +29,9 @@ export const UpdateRepsModal: React.FC<UpdateRepsModalProps> = ({
 
   if (!isOpen || !exercise) return null;
 
+  const isSeconds = exercise.unit === 'seconds';
+  const unitText = isSeconds ? 'giây' : 'reps';
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave(exercise.id, Number(newReps), newDate);
@@ -43,7 +46,7 @@ export const UpdateRepsModal: React.FC<UpdateRepsModalProps> = ({
         <div className="modal-header">
           <h2 className="modal-title">
             <Edit3 size={22} style={{ color: 'var(--accent-cyan)' }} />
-            Cập nhật Max Rep
+            {isSeconds ? 'Cập nhật Max Thời gian' : 'Cập nhật Max Rep'}
           </h2>
           <button className="btn btn-icon" onClick={onClose}>
             <X size={18} />
@@ -56,18 +59,18 @@ export const UpdateRepsModal: React.FC<UpdateRepsModalProps> = ({
               {exercise.name}
             </h4>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              <span>Kỷ lục hiện tại: <strong style={{ color: 'var(--accent-emerald)' }}>{exercise.currentMaxReps} reps</strong></span>
+              <span>Kỷ lục hiện tại: <strong style={{ color: 'var(--accent-emerald)' }}>{exercise.currentMaxReps} {unitText}</strong></span>
               <span>Ngày: {exercise.lastUpdated || 'N/A'}</span>
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div className="form-group">
-              <label className="form-label">Max Rep mới *</label>
+              <label className="form-label">{isSeconds ? 'Thời gian mới (Giây) *' : 'Max Rep mới *'}</label>
               <input
                 type="number"
                 min="1"
-                max="9999"
+                max="99999"
                 className="form-input"
                 value={newReps}
                 onChange={(e) => setNewReps(Math.max(1, parseInt(e.target.value) || 0))}
@@ -94,15 +97,15 @@ export const UpdateRepsModal: React.FC<UpdateRepsModalProps> = ({
               <TrendingUp size={16} style={{ transform: repDifference < 0 ? 'rotate(180deg)' : 'none' }} />
               <span>
                 {repDifference > 0
-                  ? `Tăng +${repDifference} reps so với kỷ lục trước!`
-                  : `Thay đổi ${repDifference} reps`}
+                  ? `Tăng +${repDifference} ${unitText} so với kỷ lục trước!`
+                  : `Thay đổi ${repDifference} ${unitText}`}
               </span>
             </div>
           )}
 
           <div style={{ padding: '0.75rem', background: 'rgba(6, 182, 212, 0.08)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(6, 182, 212, 0.2)', fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             <History size={16} style={{ color: 'var(--accent-cyan)', flexShrink: 0 }} />
-            <span>Kỷ lục cũ ({exercise.currentMaxReps} reps) sẽ tự động được lưu vào Lịch sử (giữ tối đa 4 lần gần nhất).</span>
+            <span>Kỷ lục cũ ({exercise.currentMaxReps} {unitText}) sẽ tự động được lưu vào Lịch sử (giữ tối đa 4 lần gần nhất).</span>
           </div>
 
           <div className="modal-footer">

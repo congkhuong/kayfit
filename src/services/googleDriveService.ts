@@ -109,7 +109,14 @@ export const findDriveFileId = async (token: string): Promise<string | null> => 
       clearStoredToken();
       throw new Error('Phiên làm việc Google Drive đã hết hạn. Vui lòng đăng nhập lại.');
     }
-    throw new Error(`Google Drive API Search Error: ${res.statusText}`);
+    let errDetail = res.statusText || String(res.status);
+    try {
+      const errData = await res.json();
+      if (errData?.error?.message) {
+        errDetail = `[HTTP ${res.status}] ${errData.error.message}`;
+      }
+    } catch {}
+    throw new Error(`Lỗi kết nối Google Drive API: ${errDetail}`);
   }
 
   const data = await res.json();
@@ -126,7 +133,14 @@ export const downloadDriveFile = async (token: string, fileId: string): Promise<
   });
 
   if (!res.ok) {
-    throw new Error(`Cannot download file from Google Drive: ${res.statusText}`);
+    let errDetail = res.statusText || String(res.status);
+    try {
+      const errData = await res.json();
+      if (errData?.error?.message) {
+        errDetail = `[HTTP ${res.status}] ${errData.error.message}`;
+      }
+    } catch {}
+    throw new Error(`Tải tệp từ Google Drive thất bại: ${errDetail}`);
   }
 
   return await res.json();
@@ -156,7 +170,14 @@ export const uploadDriveFile = async (
         clearStoredToken();
         throw new Error('Phiên đăng nhập Google hết hạn.');
       }
-      throw new Error(`Cập nhật file Google Drive thất bại: ${res.statusText}`);
+      let errDetail = res.statusText || String(res.status);
+      try {
+        const errData = await res.json();
+        if (errData?.error?.message) {
+          errDetail = `[HTTP ${res.status}] ${errData.error.message}`;
+        }
+      } catch {}
+      throw new Error(`Cập nhật file Google Drive thất bại: ${errDetail}`);
     }
 
     const updated = await res.json();
@@ -196,7 +217,14 @@ export const uploadDriveFile = async (
         clearStoredToken();
         throw new Error('Phiên đăng nhập Google hết hạn.');
       }
-      throw new Error(`Tạo file Google Drive thất bại: ${res.statusText}`);
+      let errDetail = res.statusText || String(res.status);
+      try {
+        const errData = await res.json();
+        if (errData?.error?.message) {
+          errDetail = `[HTTP ${res.status}] ${errData.error.message}`;
+        }
+      } catch {}
+      throw new Error(`Tạo file Google Drive thất bại: ${errDetail}`);
     }
 
     const created = await res.json();

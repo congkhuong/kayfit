@@ -1,6 +1,9 @@
+export type ExerciseUnit = 'reps' | 'seconds';
+
 export interface HistoryRecord {
   id: string;
-  reps: number;
+  reps: number; // Giá trị (số rep hoặc số giây)
+  unit?: ExerciseUnit;
   date: string; // Format: YYYY-MM-DD
 }
 
@@ -8,6 +11,7 @@ export interface Exercise {
   id: string;
   name: string;
   category?: string;
+  unit?: ExerciseUnit; // 'reps' (mặc định) hoặc 'seconds'
   currentMaxReps: number;
   lastUpdated: string; // Format: YYYY-MM-DD
   history: HistoryRecord[]; // Tối đa 4 bản ghi gần nhất
